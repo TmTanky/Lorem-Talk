@@ -1,0 +1,22 @@
+<%- include(`heading`) -%>
+
+<div class="reginers">
+    <form action="/register" method="post" class="registrar">
+
+        <h1>Meet new friends with LoremTalk</h1>
+
+        <input type="text" name="givenname" placeholder="Given Name" class="registinputs registinputs1">
+        <input type="text" name="lastname" placeholder="Last Name" class="registinputs registinputs2">
+        
+        <input type="email" name="email" placeholder="Email" class="registinputs registinputs3">
+        <input type="password" name="password" placeholder="Pasword" class="registinputs registinputs4">
+        <button type="submit" class="registbtn"> Sign Up </button> 
+        
+        </form>
+
+        <form action="/" method="get" class="gobackers">
+            <button type="submit" class="goback">Go back</button>
+          </form>
+</div>
+
+<%- include(`footer`) -%> 

@@ -1,0 +1,42 @@
+<%- include(`heading`) -%>
+
+<form action="/" method="post" class="logg">
+
+    <div class="logo"> 
+        <h1> LoremTalk </h1>
+    </div>
+
+    <div class="loginers">
+
+    <input type="email" name="loginEmaillers" placeholder="Email" class="inputers" >
+    <input type="password" name="loginPassers" placeholder="Password" class="inputers" >
+
+    <button type="submit" class="button"> Login </button>
+
+    </div>
+
+</form>
+
+<div class="indexmain"> 
+
+    <div class="indexinfo">
+        <h1 data-aos="fade-right" data-aos-duration="1000"> Be friendly, <br/> Be kind.</h1>
+        <p data-aos="fade-right" data-aos-duration="1500"> Connect with everyone aroung the world. </p>
+    </div>
+
+    <div class="indexregister">
+        
+
+        <div class="signup">
+            <form action="/register" method="GET" class="regg">
+              <h1> Not registered? </h1>
+              <p>Sign up now!</p> <button type="submit">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+
+<%- include(`footer`) -%>
