@@ -17,7 +17,7 @@ app.use(express.static(`public`))
 
 
 
-mongoose.connect('mongodb://localhost:27017/appDB', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb+srv://TmAdmin:123admin@cluster0.c7khy.mongodb.net/appDB?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 // mongoose.set('useCreateIndex', true)
 
 const loginAppSchema = new mongoose.Schema({
