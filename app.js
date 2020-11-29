@@ -2,12 +2,10 @@ const express = require(`express`)
 const bodyParser = require(`body-parser`)
 const ejs = require(`ejs`)
 const mongoose = require(`mongoose`)
-const { response } = require("express")
-const session = require(`express-session`)
-const passport = require(`passport`)
-const passportLocalMongoose = require(`passport-local-mongoose`)
-const { Passport } = require("passport")
-
+// const { response } = require("express")
+// const session = require(`express-session`)
+// const passport = require(`passport`), LocalStrategy = require(`passport-local`).Strategy
+// const passportLocalMongoose = require(`passport-local-mongoose`)
 
 const app = express()
 
@@ -15,10 +13,8 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.set(`view engine`, `ejs`)
 app.use(express.static(`public`))
 
-
-
 mongoose.connect('mongodb+srv://TmAdmin:123admin@cluster0.c7khy.mongodb.net/appDB?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
-// mongoose.set('useCreateIndex', true)
+
 
 const loginAppSchema = new mongoose.Schema({
     name: {
@@ -27,7 +23,7 @@ const loginAppSchema = new mongoose.Schema({
     last_name: {
         type: String,
     },
-    email: {
+    username: {
         type: String,
     },
     password: {
@@ -58,30 +54,31 @@ app.post(`/`,function(req, res){
     const loginPass = req.body.loginPassers
 
     const loginProcess = new account({
-        email: loginEmail,
+        username: loginEmail,
         password: loginPass
     })  
 
-    account.findOne({email: loginEmail, password: loginPass},function(err, userAcc){
+    account.findOne({username: loginEmail, password: loginPass},function(err, userAcc){
         if (err) {
             console.log(err)
         }
         else if (userAcc) {
-                if (userAcc.email === loginProcess.email && userAcc.password === loginProcess.password) {
+                if (userAcc.username === loginProcess.username && userAcc.password === loginProcess.password) {
                     res.redirect(`/home`) 
-                    console.log(`Successfully logged in`)   
+                    console.log(`Successfully logged in`) 
+                    console.log(userAcc)  
                 } else {
                     console.log(`Eyow`)
                 }
             }
     })
 
-    if (loginProcess.email === "" && loginProcess.password === "") {
+    if (loginProcess.username === "" && loginProcess.password === "") {
         console.log(`Please input both`)
         res.render(`failed`, {year: newYear})
-    } else if (loginProcess.email && loginProcess.password === "") {
+    } else if (loginProcess.username && loginProcess.password === "") {
         res.render(`failed`, {year: newYear})
-    } else if (loginProcess.email === "" && loginProcess.password) {
+    } else if (loginProcess.username === "" && loginProcess.password) {
         res.render(`failed`, {year: newYear})
     }
 
@@ -93,7 +90,7 @@ app.get(`/register`, function(req, res){
 
 app.post(`/register`, function(req, res){
 
-     const regName = req.body.givenname
+    const regName = req.body.givenname
     const regLastName = req.body.lastname 
     const regEmail = req.body.email
     const regPass = req.body.password
@@ -101,19 +98,21 @@ app.post(`/register`, function(req, res){
     const regProcess = new account ({
         name: regName,
         last_name: regLastName,
-        email: regEmail,
+        username: regEmail,
         password: regPass
     })
 
-    if (regProcess.name === "" && regProcess.last_name === "" && regProcess.email === "" && regProcess.password === "") {
+    console.log(regName, regLastName, regEmail, regPass)
+
+    if (regProcess.name === "" && regProcess.last_name === "" && regProcess.username === "" && regProcess.password === "") {
         console.log(`Please input details`)
-    } else if (regProcess.name && regProcess.last_name === "" && regProcess.email === "" && regProcess.password === "") {
+    } else if (regProcess.name && regProcess.last_name === "" && regProcess.username === "" && regProcess.password === "") {
         console.log(`Please input last name, email and password`)
-    } else if (regProcess.name && regProcess.last_name && regProcess.email === "" && regProcess.password === "") {
+    } else if (regProcess.name && regProcess.last_name && regProcess.username === "" && regProcess.password === "") {
         console.log(`Please input email and password`)
-    } else if (regProcess.name && regProcess.last_name && regProcess.email && regProcess.password === "") {
+    } else if (regProcess.name && regProcess.last_name && regProcess.username && regProcess.password === "") {
         console.log(`Please input password`)
-    } else if (regProcess.name && regProcess.last_name && regProcess.email && regProcess.password) {
+    } else if (regProcess.name && regProcess.last_name && regProcess.username && regProcess.password) {
         console.log(`Successfully registered`)
         regProcess.save()
         res.render(`home`, {year: newYear})
