@@ -1,11 +1,10 @@
+require('dotenv').config()
 const express = require(`express`)
 const bodyParser = require(`body-parser`)
 const ejs = require(`ejs`)
 const mongoose = require(`mongoose`)
-// const { response } = require("express")
-// const session = require(`express-session`)
-// const passport = require(`passport`), LocalStrategy = require(`passport-local`).Strategy
-// const passportLocalMongoose = require(`passport-local-mongoose`)
+const jwt = require(`jsonwebtoken`)
+
 
 const app = express()
 
@@ -13,8 +12,9 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.set(`view engine`, `ejs`)
 app.use(express.static(`public`))
 
-mongoose.connect('mongodb+srv://TmAdmin:123admin@cluster0.c7khy.mongodb.net/appDB?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
 
+
+mongoose.connect(process.env.LOREM_TALK, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const loginAppSchema = new mongoose.Schema({
     name: {
@@ -41,6 +41,41 @@ function year() {
      return getYear = getDate.getFullYear();
 }
 
+// function auth(req, res, next) {
+//     const token = req.header(`auth-token`)
+//     if (!token) {
+//         res.redirect(`failed`)
+//     } 
+
+//     else if (token) {
+//         const verified = jwt.verify(token, `salamatshopee`)
+//         req.loginProcess = verified
+//         console.log(token)
+//         next()
+//     } else {
+//         res.redirect(`/`)
+//         console.log(err)
+//     }
+// }
+
+// function authToken(req, res, next, err) {
+//     const token = req.headers(`auth-token`)
+    
+//     console.log(token)
+
+//     if(err) {
+//         console.log(err)
+//     } else if (token) {
+//         console.log(token)
+//         res.render(`home`, {year: newYear})
+//         next()
+//     } else {
+//         console.log(`bano`)
+//     }
+
+    
+// }
+
 const newYear = year();
 
 app.get(`/`, function(req, res){
@@ -64,8 +99,8 @@ app.post(`/`,function(req, res){
         }
         else if (userAcc) {
                 if (userAcc.username === loginProcess.username && userAcc.password === loginProcess.password) {
-                    res.redirect(`/home`) 
-                    console.log(`Successfully logged in`) 
+                    res.redirect(`/home`)
+
                     console.log(userAcc)  
                 } else {
                     console.log(`Eyow`)
@@ -81,7 +116,6 @@ app.post(`/`,function(req, res){
     } else if (loginProcess.username === "" && loginProcess.password) {
         res.render(`failed`, {year: newYear})
     }
-
 })
 
 app.get(`/register`, function(req, res){
@@ -106,39 +140,36 @@ app.post(`/register`, function(req, res){
 
     if (regProcess.name === "" && regProcess.last_name === "" && regProcess.username === "" && regProcess.password === "") {
         console.log(`Please input details`)
+        res.render(`failed`, {year: newYear})
     } else if (regProcess.name && regProcess.last_name === "" && regProcess.username === "" && regProcess.password === "") {
         console.log(`Please input last name, email and password`)
+        res.render(`failed`, {year: newYear})
     } else if (regProcess.name && regProcess.last_name && regProcess.username === "" && regProcess.password === "") {
         console.log(`Please input email and password`)
+        res.render(`failed`, {year: newYear})
     } else if (regProcess.name && regProcess.last_name && regProcess.username && regProcess.password === "") {
         console.log(`Please input password`)
+        res.render(`failed`, {year: newYear})
     } else if (regProcess.name && regProcess.last_name && regProcess.username && regProcess.password) {
         console.log(`Successfully registered`)
         regProcess.save()
         res.render(`home`, {year: newYear})
     } else {
         console.log(`Well done!`)
+        res.render(`failed`, {year: newYear})
     }
 
 })
 
 app.get(`/home`, function(req, res){
-    
+
     res.render(`home`, {year: newYear})
 })
 
-app.post(`/home`, function(req, res){
-
-    const posts = req.body.postarea
-
-    const newPost = new account ({
-        post: posts
-    })
-
-    
-
-    res.redirect(`/home`)
+app.get(`/secret`, function(req, res){
+    res.send(`Bano ka`)
 })
+
 
 app.listen(process.env.PORT || 3000, function(){
     console.log(`Server is running`)

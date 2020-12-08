@@ -175,6 +175,7 @@
 .footers {
     font-family: var(--small);
     text-align: center;
+    padding-bottom: 1rem;
 }
 
 /* register styles */
@@ -287,4 +288,81 @@
 .failbtn:hover {
     background-color: lightgray;
     color: white;
+}
+
+/* Home EJS */
+
+h1.wilkam {
+    display: flex;
+    text-align: center;
+    margin: auto;
+    justify-content: center;
+    padding: 16rem;
+    font-family: var(--big);
+    font-size: 3rem;
+}
+
+@media screen and (max-width: 1200px) {
+    .reginers {
+        padding: 2rem 10rem;
+    }
+}
+
+@media screen and (max-width: 1040px) {
+    .indexmain {
+        flex-direction: column;
+    }
+
+    .indexinfo {
+        text-align: left;
+        margin: 2rem auto;
+    }
+
+    .indexinfo h1 {
+        font-size: 10vw;
+    }
+
+    .indexregister {
+        margin-bottom: 1rem;
+    }
+
+    /* register EJS */
+
+    .reginers {
+        padding: 2rem 5rem;
+    }
+
+    .reginers h1 {
+        font-size: 4vw;
+        text-align: center;
+    }
+
+    .registinputs {
+        width: 80%;
+    }
+
+}
+
+@media screen and (max-width: 800px) {
+    .logg {
+        flex-direction: column;
+    }
+
+    .logo {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .logo h1 {
+        padding-bottom: 1rem;
+    }
+
+    .inputers {
+        padding: 0.8rem 0.5rem;
+        width: 50%;
+    }
+
+    .button {
+        width: 20%;
+    }
 }
