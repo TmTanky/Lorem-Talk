@@ -329,7 +329,7 @@ h1.wilkam {
     /* register EJS */
 
     .reginers {
-        padding: 2rem 5rem;
+        padding: 2rem 1rem;
     }
 
     .reginers h1 {
@@ -364,5 +364,24 @@ h1.wilkam {
 
     .button {
         width: 20%;
+    }
+
+    /* register ejs */
+
+    .registrar {
+        padding: 1rem 0rem;
+    }
+
+    .reginers {
+        padding: 2rem 1rem;
+    }
+
+    .reginers h1 {
+        font-size: 5vw;
+        text-align: center;
+    }
+
+    .registinputs {
+        width: 80%;
     }
 }
