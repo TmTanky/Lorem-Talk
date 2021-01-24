@@ -297,9 +297,14 @@ h1.wilkam {
     text-align: center;
     margin: auto;
     justify-content: center;
+    flex-direction: column;
     padding: 16rem;
     font-family: var(--big);
     font-size: 3rem;
+}
+
+.logout {
+    padding: 0.5rem 1rem;
 }
 
 @media screen and (max-width: 1200px) {

@@ -4,15 +4,18 @@ const bodyParser = require(`body-parser`)
 const ejs = require(`ejs`)
 const mongoose = require(`mongoose`)
 const jwt = require(`jsonwebtoken`)
-
+const cookieSession = require('cookie-session')
 
 const app = express()
 
+app.set('trust proxy', 1)
 app.use(bodyParser.urlencoded({extended: true}))
 app.set(`view engine`, `ejs`)
 app.use(express.static(`public`))
-
-
+app.use(cookieSession({
+    name: 'session',
+    keys: ['key1', 'key2']
+  }))
 
 mongoose.connect(process.env.LOREM_TALK, {useNewUrlParser: true, useUnifiedTopology: true});
 
@@ -43,46 +46,19 @@ function year() {
      return getYear = getDate.getFullYear();
 }
 
-// function auth(req, res, next) {
-//     const token = req.header(`auth-token`)
-//     if (!token) {
-//         res.redirect(`failed`)
-//     } 
-
-//     else if (token) {
-//         const verified = jwt.verify(token, `salamatshopee`)
-//         req.loginProcess = verified
-//         console.log(token)
-//         next()
-//     } else {
-//         res.redirect(`/`)
-//         console.log(err)
-//     }
-// }
-
-// function authToken(req, res, next, err) {
-//     const token = req.headers(`auth-token`)
-    
-//     console.log(token)
-
-//     if(err) {
-//         console.log(err)
-//     } else if (token) {
-//         console.log(token)
-//         res.render(`home`, {year: newYear})
-//         next()
-//     } else {
-//         console.log(`bano`)
-//     }
-
-    
-// }
-
 const newYear = year();
 
 app.get(`/`, function(req, res){
 
-    res.render(`index`, {year: newYear})
+    const kuki = req.session.ID 
+
+    if (!kuki) {
+        res.render(`index`, {year: newYear})
+    } else {
+        res.render(`home`, {year: newYear})
+    }
+
+
 })
 
 app.post(`/`,function(req, res){
@@ -95,18 +71,22 @@ app.post(`/`,function(req, res){
         password: loginPass
     })  
 
-    account.findOne({username: loginEmail, password: loginPass},function(err, userAcc){
+    account.findOne({username: loginEmail, password: loginPass}, function(err, userAcc){
         if (err) {
             console.log(err)
         }
         else if (userAcc) {
                 if (userAcc.username === loginProcess.username && userAcc.password === loginProcess.password) {
-                    res.redirect(`/home`)
 
-                    console.log(userAcc)  
+                    const kuki = req.session.ID = userAcc._id
+                    console.log(kuki)
+
+                    res.redirect(`/home`)
                 } else {
-                    console.log(`Eyow`)
+                    res.render(`failed`, {year: newYear})
                 }
+            } else {
+                res.render(`failed`, {year: newYear})
             }
     })
 
@@ -155,6 +135,8 @@ app.post(`/register`, function(req, res){
     } else if (regProcess.name && regProcess.last_name && regProcess.username && regProcess.password) {
         console.log(`Successfully registered`)
         regProcess.save()
+        const kuki = req.session.ID = regProcess._id
+        console.log(kuki)
         res.render(`home`, {year: newYear})
     } else {
         console.log(`Well done!`)
@@ -165,13 +147,22 @@ app.post(`/register`, function(req, res){
 
 app.get(`/home`, function(req, res){
 
-    res.render(`home`, {year: newYear})
+    const kuki = req.session.ID
+
+    if (!kuki) {
+        res.redirect(`/`)
+    } else {
+        res.render(`home`, {year: newYear})
+    }
+
 })
 
-app.get(`/secret`, function(req, res){
-    res.send(`Bano ka`)
-})
+app.post(`/logout`, (req, res) => {
 
+    const kuki = req.session.ID = null
+    
+    res.redirect(`/`)
+})
 
 app.listen(process.env.PORT || 3000, function(){
     console.log(`Server is running`)
